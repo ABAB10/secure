@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon profil - AuthSecure{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-image"></i> Photo</h4>
+            </div>
+            <div class="card-body text-center">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" class="avatar-large mb-3">
+                {% else %}
+                    <div class="avatar-large bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px; font-size: 3rem;">
+                        {{ user.first_name|first|default:user.username|first|upper }}
+                    </div>
+                {% endif %}
+                <a href="{% url 'users:profile_edit' %}" class="btn btn-primary mt-2">
+                    <i class="fas fa-upload"></i> Changer la photo
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-info-circle"></i> Mes informations</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th style="width: 40%;">Nom d'utilisateur :</th>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom complet :</th>
+                        <td>{{ user.get_full_name|default:"Non renseigné" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email :</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Téléphone :</th>
+                        <td>{{ user.profile.phone|default:"Non renseigné" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de naissance :</th>
+                        <td>{{ user.profile.birth_date|date:"d/m/Y"|default:"Non renseignée" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresse :</th>
+                        <td>
+                            {{ user.profile.address|default:"Non renseignée" }}<br>
+                            {{ user.profile.city|default:"" }} {{ user.profile.country|default:"" }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Bio :</th>
+                        <td>{{ user.profile.bio|default:"Non renseignée"|linebreaks }}</td>
+                    </tr>
+                    <tr>
+                        <th>Newsletter :</th>
+                        <td>{% if user.profile.newsletter %}Oui{% else %}Non{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Membre depuis :</th>
+                        <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Dernière modification :</th>
+                        <td>{{ user.profile.updated_at|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                </table>
+                
+                <div class="text-center mt-3">
+                    <a href="{% url 'users:profile_edit' %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Modifier mon profil
+                    </a>
+                    <a href="{% url 'users:password_change' %}" class="btn btn-info">
+                        <i class="fas fa-key"></i> Changer mon mot de passe
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
